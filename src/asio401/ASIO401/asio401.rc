@@ -1,5 +1,27 @@
+#include <windows.h>
+
 #include "asio401.rc.h"
 
 IDR_ASIO401 REGISTRY "asio401.rgs"
 
 1 TYPELIB "ASIO401.tlb"
+
+IDD_SETTINGS DIALOGEX 0, 0, 250, 172
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "ASIO401 Settings"
+FONT 9, "Segoe UI", 400, 0, 0x1
+BEGIN
+    GROUPBOX        "Levels", IDC_STATIC, 7, 7, 236, 66
+    LTEXT           "Full scale input level:", IDC_STATIC, 14, 21, 90, 8
+    COMBOBOX        IDC_INPUT_LEVEL, 108, 18, 128, 120, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Full scale output level:", IDC_STATIC, 14, 39, 90, 8
+    COMBOBOX        IDC_OUTPUT_LEVEL, 108, 36, 128, 120, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Keep levels when the stream stops (avoids relay clicks)", IDC_KEEP_LEVELS, "Button", BS_AUTOCHECKBOX | WS_TABSTOP, 14, 56, 222, 10
+    GROUPBOX        "Streaming", IDC_STATIC, 7, 78, 236, 50
+    LTEXT           "Buffer size:", IDC_STATIC, 14, 92, 90, 8
+    COMBOBOX        IDC_BUFFER_SIZE, 108, 89, 128, 120, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Always read from the device, even in output-only mode", IDC_FORCE_READ, "Button", BS_AUTOCHECKBOX | WS_TABSTOP, 14, 110, 222, 10
+    LTEXT           "Changes take effect the next time an application opens the driver.", IDC_STATIC, 7, 134, 236, 8
+    DEFPUSHBUTTON   "OK", IDOK, 139, 151, 50, 14
+    PUSHBUTTON      "Cancel", IDCANCEL, 193, 151, 50, 14
+END

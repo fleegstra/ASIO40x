@@ -1,15 +1,15 @@
 # ASIO401 Configuration
 
-ASIO401 does not provide a graphical interface ([GUI][]) to adjust its
-settings. This is because developing a GUI typically requires a
-significant amount of developer time that ASIO401, sadly, doesn't have.
-This explains why nothing happens when you click on the ASIO driver
-"configure" or "settings" button in your application.
+ASIO401 settings are stored in a [configuration file][]. ASIO401 will
+search for a file named `ASIO401.toml` directly inside your Windows user
+profile folder; for example: `C:\Users\Your Name\ASIO401.toml`.
 
-Instead, ASIO401 settings can be specified using a
-[configuration file][]. ASIO401 will search for a file named
-`ASIO401.toml` directly inside your Windows user profile folder; for
-example: `C:\Users\Your Name\ASIO401.toml`.
+Clicking the ASIO driver "configure" or "settings" button in your
+application opens a small settings dialog that covers the most common
+options. Clicking OK in that dialog *overwrites* `ASIO401.toml` with the
+chosen settings; any comments or hand-written additions in the file are
+lost. If you prefer, you can still edit the file by hand as described
+below.
 
 If the file is missing, this is equivalent to supplying an empty file,
 and as a result ASIO401 will use default values for everything.

@@ -14,14 +14,12 @@ namespace asio401 {
 	namespace {
 
 		std::optional<toml::Value> LoadConfigToml() {
-			const auto userDirectory = GetUserDirectory();
-			if (!userDirectory.has_value()) {
+			const auto maybePath = GetConfigFilePath();
+			if (!maybePath.has_value()) {
 				Log() << "Unable to determine user directory for configuration file";
 				return toml::Table();
 			}
-
-			std::filesystem::path path(*userDirectory);
-			path.append("ASIO401.toml");
+			const auto& path = *maybePath;
 
 			Log() << "Attempting to load configuration file: " << path;
 
@@ -102,6 +100,14 @@ namespace asio401 {
 			}
 		}
 
+	}
+
+	std::optional<std::filesystem::path> GetConfigFilePath() {
+		const auto userDirectory = GetUserDirectory();
+		if (!userDirectory.has_value()) return std::nullopt;
+		std::filesystem::path path(*userDirectory);
+		path.append("ASIO401.toml");
+		return path;
 	}
 
 	std::optional<Config> LoadConfig() {

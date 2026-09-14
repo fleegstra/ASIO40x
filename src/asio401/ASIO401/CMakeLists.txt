@@ -85,6 +85,13 @@ target_link_libraries(ASIO401_qa403
 	PRIVATE ASIO401_log
 )
 
+add_library(ASIO401_settings STATIC EXCLUDE_FROM_ALL settings.cpp)
+target_link_libraries(ASIO401_settings
+	PUBLIC ASIO401_config
+	PRIVATE ASIO401_log
+	PRIVATE tinytoml
+)
+
 add_library(ASIO401_asio401 STATIC EXCLUDE_FROM_ALL asio401.cpp)
 target_link_libraries(ASIO401_asio401
 	PUBLIC dechamps_ASIOUtil::asiosdk_asioh
@@ -95,6 +102,7 @@ target_link_libraries(ASIO401_asio401
 	PRIVATE dechamps_ASIOUtil::asio
 	PRIVATE ASIO401_devices
 	PRIVATE ASIO401_log
+	PRIVATE ASIO401_settings
 	PRIVATE dechamps_cpputil::endian
 	PRIVATE dechamps_cpputil::string
 	PRIVATE dechamps_CMakeUtils_version

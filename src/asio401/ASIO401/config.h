@@ -1,9 +1,13 @@
 #pragma once
 
+#include <filesystem>
 #include <optional>
 #include <string>
 
 namespace asio401 {
+
+	// Location of ASIO401.toml, i.e. directly inside the user profile folder.
+	std::optional<std::filesystem::path> GetConfigFilePath();
 
 	struct Config {
 		std::optional<double> fullScaleInputLevelDBV;

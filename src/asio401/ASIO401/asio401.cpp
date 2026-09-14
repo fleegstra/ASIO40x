@@ -1,6 +1,7 @@
 #include "asio401.h"
 
 #include "devices.h"
+#include "settings.h"
 
 #include <cassert>
 #include <algorithm>
@@ -1052,10 +1053,11 @@ namespace asio401 {
 	}
 
 	void ASIO401::ControlPanel() {
-		const auto url = std::string("https://github.com/dechamps/ASIO401/blob/") + ::dechamps_CMakeUtils_gitDescription + "/CONFIGURATION.md";
-		Log() << "Opening URL: " << url;
-		const auto result = ShellExecuteA(windowHandle, NULL, url.c_str(), NULL, NULL, SW_SHOWNORMAL);
-		Log() << "ShellExecuteA() result: " << result;
+		const auto settingsDevice = WithDevice(
+			[&](const QA401&) { return SettingsDevice::QA401; },
+			[&](const QA403&) { return SettingsDevice::QA403; });
+		Log() << "Opening settings dialog";
+		ShowSettingsDialog(windowHandle, settingsDevice, config);
 	}
 
 }
