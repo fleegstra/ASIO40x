@@ -2,3 +2,7 @@
 .vs/
 CMakeSettings.json
 out/
+
+src/build
+.vscode
+handover
