@@ -1,5 +1,6 @@
 #pragma once
 
+#include "calibration.h"
 #include "qa40x.h"
 
 #include <dechamps_cpputil/endian.h>
@@ -48,14 +49,19 @@ namespace asio401 {
 		void Reset(FullScaleInputLevel fullScaleInputLevel, FullScaleOutputLevel fullScaleOutputLevel, SampleRate sampleRate);
 		void Start();
 
+		// Reads the factory calibration page from the device flash. Throws on USB errors.
+		Calibration::Page ReadCalibrationPage();
+
 		QA40x::WriteChannel GetWriteChannel() { return QA40x::WriteChannel(qa40x); }
 		QA40x::ReadChannel GetReadChannel() { return QA40x::ReadChannel(qa40x); };
 
 	private:
 		void WriteRegister(uint8_t registerNumber, uint32_t value) { registerIOSlot.Execute(QA40x::RegisterChannel(qa40x), registerNumber, value); }
+		uint32_t ReadRegister(uint8_t registerNumber);
 
 		QA40x qa40x;
 		RegisterQA40xIOSlot registerIOSlot;
+		RegisterReadQA40xIOSlot registerReadIOSlot;
 	};
 
 }

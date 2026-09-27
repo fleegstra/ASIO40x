@@ -10,11 +10,13 @@ namespace asio401 {
 
 	class QA40x final {
 	public:
-		QA40x(std::string_view devicePath, UCHAR registerPipeId, UCHAR writePipeId, UCHAR readPipeId, bool requiresApp);
+		// registerReadPipeId is the IN pipe that returns the value of a register after a read request (register number | 0x80) was sent on registerPipeId.
+		// It is optional (0 if the device does not support register reads).
+		QA40x(std::string_view devicePath, UCHAR registerPipeId, UCHAR writePipeId, UCHAR readPipeId, bool requiresApp, UCHAR registerReadPipeId = 0);
 
 		using AwaitResult = WinUsbOverlappedIO::AwaitResult;
 
-		enum class ChannelType { REGISTER, WRITE, READ };
+		enum class ChannelType { REGISTER, WRITE, READ, REGISTER_READ };
 		template <ChannelType channelType>
 		struct Channel {
 		public:
@@ -25,7 +27,7 @@ namespace asio401 {
 			public:
 				Pending(Channel, uint8_t registerNumber, uint32_t value, WindowsReusableEvent&) requires (channelType == ChannelType::REGISTER);
 				Pending(Channel, std::span<const std::byte> buffer, WindowsReusableEvent&) requires (channelType == ChannelType::WRITE);
-				Pending(Channel, std::span<std::byte> buffer, WindowsReusableEvent&) requires (channelType == ChannelType::READ);
+				Pending(Channel, std::span<std::byte> buffer, WindowsReusableEvent&) requires (channelType == ChannelType::READ || channelType == ChannelType::REGISTER_READ);
 
 				Pending(const Pending&) = delete;
 				Pending& operator=(const Pending&) = delete;
@@ -41,6 +43,7 @@ namespace asio401 {
 				};
 				template <> struct TypeSpecific<ChannelType::WRITE> { };
 				template <> struct TypeSpecific<ChannelType::READ> { };
+				template <> struct TypeSpecific<ChannelType::REGISTER_READ> { };
 				[[no_unique_address, msvc::no_unique_address]] TypeSpecific<> typeSpecific;
 
 				WinUsbOverlappedIO winUsbOverlappedIO;
@@ -53,6 +56,7 @@ namespace asio401 {
 		using RegisterChannel = Channel<ChannelType::REGISTER>;
 		using WriteChannel = Channel<ChannelType::WRITE>;
 		using ReadChannel = Channel<ChannelType::READ>;
+		using RegisterReadChannel = Channel<ChannelType::REGISTER_READ>;
 
 	private:
 		void Validate(bool requiresApp);
@@ -60,12 +64,14 @@ namespace asio401 {
 		const UCHAR registerPipeId;
 		const UCHAR writePipeId;
 		const UCHAR readPipeId;
+		const UCHAR registerReadPipeId;
 
 		WinUsbHandle winUsb;
 	};
 	extern template QA40x::RegisterChannel;
 	extern template QA40x::WriteChannel;
 	extern template QA40x::ReadChannel;
+	extern template QA40x::RegisterReadChannel;
 
 	template <QA40x::ChannelType channelType>
 	class QA40xIOSlot final {
@@ -76,7 +82,7 @@ namespace asio401 {
 		
 		void Start(QA40x::Channel<channelType> channel, uint8_t registerNumber, uint32_t value) requires (channelType == QA40x::ChannelType::REGISTER) { GenericStart(channel, registerNumber, value); }
 		void Start(QA40x::Channel<channelType> channel, std::span<const std::byte> buffer) requires (channelType == QA40x::ChannelType::WRITE) { GenericStart(channel, buffer); }
-		void Start(QA40x::Channel<channelType> channel, std::span<std::byte> buffer) requires (channelType == QA40x::ChannelType::READ) { GenericStart(channel, buffer); }
+		void Start(QA40x::Channel<channelType> channel, std::span<std::byte> buffer) requires (channelType == QA40x::ChannelType::READ || channelType == QA40x::ChannelType::REGISTER_READ) { GenericStart(channel, buffer); }
 
 		template <typename... Args>
 		void Execute(QA40x::Channel<channelType> channel, Args&&... args) {
@@ -97,8 +103,10 @@ namespace asio401 {
 	using RegisterQA40xIOSlot = QA40xIOSlot<QA40x::ChannelType::REGISTER>;
 	using WriteQA40xIOSlot = QA40xIOSlot<QA40x::ChannelType::WRITE>;
 	using ReadQA40xIOSlot = QA40xIOSlot<QA40x::ChannelType::READ>;
+	using RegisterReadQA40xIOSlot = QA40xIOSlot<QA40x::ChannelType::REGISTER_READ>;
 	extern template RegisterQA40xIOSlot;
 	extern template WriteQA40xIOSlot;
 	extern template ReadQA40xIOSlot;
+	extern template RegisterReadQA40xIOSlot;
 
 }

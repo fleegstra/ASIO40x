@@ -1,5 +1,6 @@
 #pragma once
 
+#include "calibration.h"
 #include "config.h"
 #include "qa401.h"
 #include "qa403.h"
@@ -188,10 +189,14 @@ namespace asio401 {
 		void ComputeLatencies(long* inputLatency, long* outputLatency, long bufferSizeInFrames, bool outputOnly) const;
 
 		static Device GetDevice();
+		// Reads the factory calibration data from the device on first use and caches it. Returns nullopt if the device has none, it could not be read, or a stream is running.
+		const std::optional<Calibration>& GetCalibration();
 
 		const HWND windowHandle = nullptr;
 		const Config config;
 		Device device;
+		// Factory calibration data, read lazily by GetCalibration(). Only used to inform the user (settings dialog and log). Outer optional: not read yet.
+		std::optional<std::optional<Calibration>> calibration;
 
 		ASIOSampleRate sampleRate = 48000;
 		bool sampleRateWasAccessed = false;
