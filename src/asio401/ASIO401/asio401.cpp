@@ -298,6 +298,49 @@ namespace asio401 {
 		ValidateConfig();
 	}
 
+	const std::optional<Calibration>& ASIO401::GetCalibration() {
+		static const std::optional<Calibration> none;
+		if (calibration.has_value()) return *calibration;
+		// Reading the calibration page means talking to the device through the register pipes, which are also used to start
+		// and stop streaming. Don't interfere with a running stream; the next time the dialog is opened while idle, we'll read it.
+		if (preparedState.has_value() && preparedState->IsRunning()) {
+			Log() << "Not reading calibration data while a stream is running";
+			return none;
+		}
+		calibration = WithDevice(
+			[&](QA401&) -> std::optional<Calibration> {
+				Log() << "The QA401 does not store calibration data, sensitivities will not be available";
+				return std::nullopt;
+			},
+			[&](QA403& qa403) -> std::optional<Calibration> {
+				Calibration::Page page;
+				try {
+					page = qa403.ReadCalibrationPage();
+				}
+				catch (const std::exception& exception) {
+					Log() << "Unable to read calibration data from the device, sensitivities will not be available: " << exception.what();
+					return std::nullopt;
+				}
+				const auto parsedCalibration = Calibration::Parse(page);
+				if (!parsedCalibration.has_value()) {
+					Log() << "Calibration data read from the device does not look valid, sensitivities will not be available";
+					return std::nullopt;
+				}
+				for (size_t index = 0; index < Calibration::inputLevelsDBV.size(); ++index) {
+					const auto levelDBV = Calibration::inputLevelsDBV[index];
+					const auto& correction = parsedCalibration->input[index];
+					Log() << "Calibrated input full scale for the " << levelDBV << " dBV range: left " << Calibration::InputFullScalePeakVolts(levelDBV, correction.leftDB) << " Vpeak (correction " << correction.leftDB << " dB), right " << Calibration::InputFullScalePeakVolts(levelDBV, correction.rightDB) << " Vpeak (correction " << correction.rightDB << " dB)";
+				}
+				for (size_t index = 0; index < Calibration::outputLevelsDBV.size(); ++index) {
+					const auto levelDBV = Calibration::outputLevelsDBV[index];
+					const auto& correction = parsedCalibration->output[index];
+					Log() << "Calibrated output full scale for the " << levelDBV << " dBV range: left " << Calibration::OutputFullScalePeakVolts(levelDBV, correction.leftDB) << " Vpeak (correction " << correction.leftDB << " dB), right " << Calibration::OutputFullScalePeakVolts(levelDBV, correction.rightDB) << " Vpeak (correction " << correction.rightDB << " dB)";
+				}
+				return parsedCalibration;
+			});
+		return *calibration;
+	}
+
 	void ASIO401::ValidateConfig() const {
 		WithDevice(
 			[&](const QA401&) {
@@ -1057,7 +1100,7 @@ namespace asio401 {
 			[&](const QA401&) { return SettingsDevice::QA401; },
 			[&](const QA403&) { return SettingsDevice::QA403; });
 		Log() << "Opening settings dialog";
-		ShowSettingsDialog(windowHandle, settingsDevice, config);
+		ShowSettingsDialog(windowHandle, settingsDevice, config, GetCalibration());
 	}
 
 }

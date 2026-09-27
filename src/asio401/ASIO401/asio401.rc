@@ -6,7 +6,7 @@ IDR_ASIO401 REGISTRY "asio401.rgs"
 
 1 TYPELIB "ASIO401.tlb"
 
-IDD_SETTINGS DIALOGEX 0, 0, 250, 172
+IDD_SETTINGS DIALOGEX 0, 0, 250, 329
 STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "ASIO401 Settings"
 FONT 9, "Segoe UI", 400, 0, 0x1
@@ -17,11 +17,40 @@ BEGIN
     LTEXT           "Full scale output level:", IDC_STATIC, 14, 39, 90, 8
     COMBOBOX        IDC_OUTPUT_LEVEL, 108, 36, 128, 120, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     CONTROL         "Keep levels when the stream stops (avoids relay clicks)", IDC_KEEP_LEVELS, "Button", BS_AUTOCHECKBOX | WS_TABSTOP, 14, 56, 222, 10
-    GROUPBOX        "Streaming", IDC_STATIC, 7, 78, 236, 50
-    LTEXT           "Buffer size:", IDC_STATIC, 14, 92, 90, 8
-    COMBOBOX        IDC_BUFFER_SIZE, 108, 89, 128, 120, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    CONTROL         "Always read from the device, even in output-only mode", IDC_FORCE_READ, "Button", BS_AUTOCHECKBOX | WS_TABSTOP, 14, 110, 222, 10
-    LTEXT           "Changes take effect the next time an application opens the driver.", IDC_STATIC, 7, 134, 236, 8
-    DEFPUSHBUTTON   "OK", IDOK, 139, 151, 50, 14
-    PUSHBUTTON      "Cancel", IDCANCEL, 193, 151, 50, 14
+
+    // Calibrated sensitivities. Hidden (and everything below moved up) when the device has no calibration data, see settings.cpp.
+    // Row controls have consecutive IDs: label = IDC_CAL_LABEL_FIRST + row, value = IDC_CAL_VALUE_FIRST + row, copy = IDC_CAL_COPY_FIRST + row.
+    GROUPBOX        "Calibrated sensitivities for these levels (QA403 factory data)", IDC_CAL_GROUP, 7, 78, 236, 152
+    LTEXT           "ARTA / STEPS / LIMP", IDC_CAL_ARTA_HEADING, 14, 90, 150, 8
+    LTEXT           "LineIn Sensitivity (mVpeak - left ch)", 220, 14, 103, 150, 8
+    EDITTEXT        230, 168, 101, 44, 12, ES_RIGHT | ES_READONLY | ES_AUTOHSCROLL | NOT WS_TABSTOP
+    PUSHBUTTON      "", 240, 216, 101, 20, 12
+    LTEXT           "L/R channel diff. (dB)", 221, 14, 117, 150, 8
+    EDITTEXT        231, 168, 115, 44, 12, ES_RIGHT | ES_READONLY | ES_AUTOHSCROLL | NOT WS_TABSTOP
+    PUSHBUTTON      "", 241, 216, 115, 20, 12
+    LTEXT           "LineOut Sensitivity (mVpeak - left ch)", 222, 14, 131, 150, 8
+    EDITTEXT        232, 168, 129, 44, 12, ES_RIGHT | ES_READONLY | ES_AUTOHSCROLL | NOT WS_TABSTOP
+    PUSHBUTTON      "", 242, 216, 129, 20, 12
+    LTEXT           "REW", IDC_CAL_REW_HEADING, 14, 150, 150, 8
+    LTEXT           "Input FS sine Vrms - left ch", 223, 14, 163, 150, 8
+    EDITTEXT        233, 168, 161, 44, 12, ES_RIGHT | ES_READONLY | ES_AUTOHSCROLL | NOT WS_TABSTOP
+    PUSHBUTTON      "", 243, 216, 161, 20, 12
+    LTEXT           "Input FS sine Vrms - right ch", 224, 14, 177, 150, 8
+    EDITTEXT        234, 168, 175, 44, 12, ES_RIGHT | ES_READONLY | ES_AUTOHSCROLL | NOT WS_TABSTOP
+    PUSHBUTTON      "", 244, 216, 175, 20, 12
+    LTEXT           "Output FS sine Vrms - left ch", 225, 14, 191, 150, 8
+    EDITTEXT        235, 168, 189, 44, 12, ES_RIGHT | ES_READONLY | ES_AUTOHSCROLL | NOT WS_TABSTOP
+    PUSHBUTTON      "", 245, 216, 189, 20, 12
+    LTEXT           "Output FS sine Vrms - right ch", 226, 14, 205, 150, 8
+    EDITTEXT        236, 168, 203, 44, 12, ES_RIGHT | ES_READONLY | ES_AUTOHSCROLL | NOT WS_TABSTOP
+    PUSHBUTTON      "", 246, 216, 203, 20, 12
+    LTEXT           "Values are for single-ended use. Double the output values (+6 dB) for balanced use.", IDC_CAL_NOTE, 14, 218, 222, 8
+
+    GROUPBOX        "Streaming", IDC_STREAMING_GROUP, 7, 235, 236, 50
+    LTEXT           "Buffer size:", IDC_BUFFER_SIZE_LABEL, 14, 249, 90, 8
+    COMBOBOX        IDC_BUFFER_SIZE, 108, 246, 128, 120, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Always read from the device, even in output-only mode", IDC_FORCE_READ, "Button", BS_AUTOCHECKBOX | WS_TABSTOP, 14, 267, 222, 10
+    LTEXT           "Changes take effect the next time an application opens the driver.", IDC_FOOTER_TEXT, 7, 291, 236, 8
+    DEFPUSHBUTTON   "OK", IDOK, 139, 308, 50, 14
+    PUSHBUTTON      "Cancel", IDCANCEL, 193, 308, 50, 14
 END
