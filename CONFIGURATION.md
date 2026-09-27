@@ -11,6 +11,15 @@ chosen settings; any comments or hand-written additions in the file are
 lost. If you prefer, you can still edit the file by hand as described
 below.
 
+On a QA403 or QA402, the settings dialog also shows the *calibrated
+sensitivities* for the selected input and output levels, read from the
+factory calibration data stored in the device. They are shown in the units
+that ARTA (mVpeak, plus the L/R channel difference in dB) and REW (full scale
+sine Vrms) expect, with a copy button next to each value. ASIO401 does not
+apply these corrections to the audio itself; enter them in your measurement
+application. The values are for single-ended use; for balanced output use,
+double the output values (+6 dB).
+
 If the file is missing, this is equivalent to supplying an empty file,
 and as a result ASIO401 will use default values for everything.
 
@@ -51,7 +60,8 @@ louder), and vice-versa.
 settings. The value entered here is NOT calibrated. The true full scale input
 voltage may deviate from this setting by several dB, and therefore should not be
 used for accurate absolute input voltage readings. If that's what you're after,
-you will want to do your own separate calibration.
+use the calibrated sensitivities shown in the settings dialog (QA403/QA402), or
+do your own separate calibration.
 
 **QA403/QA402 only:** the allowed values are `0.0`, `+6.0`, `+12.0`, `+18.0`,
 `+24.0`, `+30.0`, `+36.0` and `+42.0`. Values below `+24.0` will disengage the
@@ -82,7 +92,8 @@ louder), and vice-versa.
 settings. The value entered here is NOT calibrated. The true full scale output
 voltage may deviate from this setting by several dB, and therefore should not be
 used for accurate absolute output voltage readings. If that's what you're after,
-you will want to do your own separate calibration.
+use the calibrated sensitivities shown in the settings dialog (QA403/QA402), or
+do your own separate calibration.
 
 **QA403/QA402 only:** the allowed values are `-12.0`, `-2.0`, `+8.0` and
 `+18.0`.

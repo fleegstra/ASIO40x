@@ -23,13 +23,14 @@ namespace asio401 {
 			case QA40x::ChannelType::REGISTER: return "register";
 			case QA40x::ChannelType::WRITE: return "write";
 			case QA40x::ChannelType::READ: return "read";
+			case QA40x::ChannelType::REGISTER_READ: return "register read";
 			}
 		}();
 
 	}
 
-	QA40x::QA40x(std::string_view devicePath, UCHAR registerPipeId, UCHAR writePipeId, UCHAR readPipeId, const bool requiresApp) :
-		registerPipeId(registerPipeId), writePipeId(writePipeId), readPipeId(readPipeId),
+	QA40x::QA40x(std::string_view devicePath, UCHAR registerPipeId, UCHAR writePipeId, UCHAR readPipeId, const bool requiresApp, UCHAR registerReadPipeId) :
+		registerPipeId(registerPipeId), writePipeId(writePipeId), readPipeId(readPipeId), registerReadPipeId(registerReadPipeId),
 		winUsb(WinUsbOpen(devicePath)) {
 		Validate(requiresApp);
 	}
@@ -50,6 +51,7 @@ namespace asio401 {
 		}
 
 		std::set<UCHAR> missingPipeIds = { registerPipeId, writePipeId, readPipeId };
+		if (registerReadPipeId != 0) missingPipeIds.insert(registerReadPipeId);
 		for (UCHAR endpointIndex = 0; endpointIndex < usbInterfaceDescriptor.bNumEndpoints; ++endpointIndex) {
 			Log() << "Querying pipe #" << int(endpointIndex);
 			WINUSB_PIPE_INFORMATION pipeInformation = { 0 };
@@ -78,6 +80,10 @@ namespace asio401 {
 			}
 			else if constexpr (channelType == ChannelType::READ) {
 				return qa40x.readPipeId;
+			}
+			else if constexpr (channelType == ChannelType::REGISTER_READ) {
+				assert(qa40x.registerReadPipeId != 0);
+				return qa40x.registerReadPipeId;
 			}
 		}()) {}
 
@@ -108,7 +114,7 @@ namespace asio401 {
 		winUsbOverlappedIO(channel.winUsbInterfaceHandle, channel.pipeId, WinUsbOverlappedIO::Write(buffer), windowsReusableEvent) {}
 
 	template <QA40x::ChannelType channelType>
-	QA40x::Channel<channelType>::Pending::Pending(Channel channel, std::span<std::byte> buffer, WindowsReusableEvent& windowsReusableEvent) requires (channelType == ChannelType::READ) :
+	QA40x::Channel<channelType>::Pending::Pending(Channel channel, std::span<std::byte> buffer, WindowsReusableEvent& windowsReusableEvent) requires (channelType == ChannelType::READ || channelType == ChannelType::REGISTER_READ) :
 		typeSpecific([&] {
 			if (IsLoggingEnabled()) Log() << "Reading " << buffer.size() << " bytes from QA40x" << " as pending operation " << this;
 			assert(!buffer.empty());
@@ -125,6 +131,7 @@ namespace asio401 {
 	template QA40x::RegisterChannel;
 	template QA40x::WriteChannel;
 	template QA40x::ReadChannel;
+	template QA40x::RegisterReadChannel;
 
 	template <QA40x::ChannelType channelType>
 	QA40x::AwaitResult QA40xIOSlot<channelType>::Await() {
@@ -149,5 +156,6 @@ namespace asio401 {
 	template RegisterQA40xIOSlot;
 	template WriteQA40xIOSlot;
 	template ReadQA40xIOSlot;
+	template RegisterReadQA40xIOSlot;
 
 }
