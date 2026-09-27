@@ -21,7 +21,7 @@ BEGIN
     // Calibrated sensitivities. Hidden (and everything below moved up) when the device has no calibration data, see settings.cpp.
     // Row controls have consecutive IDs: label = IDC_CAL_LABEL_FIRST + row, value = IDC_CAL_VALUE_FIRST + row, copy = IDC_CAL_COPY_FIRST + row.
     GROUPBOX        "Calibrated sensitivities for these levels (QA403 factory data)", IDC_CAL_GROUP, 7, 78, 236, 162
-    LTEXT           "ARTA / STEPS / LIMP", IDC_CAL_ARTA_HEADING, 14, 90, 150, 8
+    LTEXT           "ARTA / STEPS", IDC_CAL_ARTA_HEADING, 14, 90, 150, 8
     LTEXT           "LineIn Sensitivity (mVpeak - left ch)", 220, 14, 103, 150, 8
     EDITTEXT        230, 168, 101, 44, 12, ES_RIGHT | ES_READONLY | ES_AUTOHSCROLL | NOT WS_TABSTOP
     PUSHBUTTON      "", 240, 216, 101, 20, 12
