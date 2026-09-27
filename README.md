@@ -1,5 +1,11 @@
-# ASIO401, the unofficial QA403/QA402/QA401 ASIO driver
-*Brought to you by [Etienne Dechamps][] - [GitHub][]*
+# ASIO40x, an unofficial QA403/QA402/QA401 ASIO driver
+*Originally by [Etienne Dechamps][]. This is the [ASIO40x][] fork, maintained by Frank Leegstra.*
+
+> **This is a fork.** This ASIO40x project continues development of [ASIO401][upstream] by
+> Etienne Dechamps. Releases from this repository are published as
+> "ASIO40x x.y". The driver itself is still called ASIO401 in your ASIO host
+> application and still uses `ASIO401.toml`, so it is a drop-in replacement for
+> the original.
 
 *ASIO is a trademark and software of Steinberg Media Technologies GmbH*
 
@@ -14,7 +20,7 @@ use a QA40x in any audio application that supports ASIO, including third-party
 audio measurement software (e.g. [REW][]).
 
 **DISCLAIMER:** while this driver was developed with the help of QuantAsylum
-(with my thanks to Matt Taylor), it is not officially supported by QuantAsylum.
+(with thanks to Matt Taylor), it is not officially supported by QuantAsylum.
 Please direct any support requests [to ASIO401][report], not QuantAsylum.
 
 ## Requirements
@@ -112,19 +118,21 @@ while the problem is occurring, and attach it to your report. The output of
 ![ASIO logo](ASIO.jpg)
 
 [ASIO]: http://en.wikipedia.org/wiki/Audio_Stream_Input/Output
+[ASIO40x]: https://github.com/fleegstra/ASIO40x
 [CONFIGURATION]: CONFIGURATION.md
 [Etienne Dechamps]: mailto:etienne@edechamps.fr
 [FAQ]: FAQ.md
-[file an issue]: https://github.com/dechamps/ASIO401/issues/new
-[GitHub]: https://github.com/dechamps/ASIO401
-[GitHub issue tracker]: https://github.com/dechamps/ASIO401/issues
+[file an issue]: https://github.com/fleegstra/ASIO40x/issues/new
+[GitHub]: https://github.com/fleegstra/ASIO40x
+[GitHub issue tracker]: https://github.com/fleegstra/ASIO40x/issues
 [logging]: #logging
 [QuantAsylum]: https://quantasylum.com/
 [QuantAsylum Analyzer]: https://github.com/QuantAsylum/QA401/releases
 [QA403]: https://quantasylum.com/products/qa403-audio-analyzer
 [QA402]: https://quantasylum.com/products/qa402-audio-analyzer
 [QA401]: https://quantasylum.com/products/qa401-audio-analyzer
-[releases]: https://github.com/dechamps/ASIO401/releases
+[releases]: https://github.com/fleegstra/ASIO40x/releases
 [report]: #reporting-issues-feedback-feature-requests
 [REW]: https://www.roomeqwizard.com/
 [test]: #test-program
+[upstream]: https://github.com/dechamps/ASIO401
