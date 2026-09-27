@@ -7,10 +7,10 @@ find_package(InnoSetup MODULE REQUIRED)
 find_package(Git MODULE REQUIRED)
 set(DECHAMPS_CMAKEUTILS_GIT_DIR "${CMAKE_CURRENT_LIST_DIR}/asio401")
 include(version/version)
-string(REGEX REPLACE "^asio401-" "" ASIO401_VERSION "${DECHAMPS_CMAKEUTILS_GIT_DESCRIPTION_DIRTY}")
+string(REGEX REPLACE "^asio40x-" "" ASIO401_VERSION "${DECHAMPS_CMAKEUTILS_GIT_DESCRIPTION_DIRTY}")
 
 configure_file("${CMAKE_CURRENT_LIST_DIR}/installer.in.iss" "${CMAKE_CURRENT_LIST_DIR}/out/installer.iss" @ONLY)
 include(execute_process_or_die)
 execute_process_or_die(
-    COMMAND "${InnoSetup_iscc_EXECUTABLE}" out/installer.iss /Oout/installer /FASIO401-${ASIO401_VERSION}
+    COMMAND "${InnoSetup_iscc_EXECUTABLE}" out/installer.iss /Oout/installer /FASIO40x-${ASIO401_VERSION}
 )
