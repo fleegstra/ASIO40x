@@ -10,7 +10,7 @@ VS_VERSION_INFO VERSIONINFO
 		{
 			VALUE "FileDescription", PROJECT_DESCRIPTION " (" BUILD_CONFIGURATION " " BUILD_PLATFORM ")"
 			VALUE "LegalCopyright", "MIT License, Copyright (c) 2018 Etienne Dechamps <etienne@edechamps.fr>"
-			VALUE "ProductName", "ASIO401 https://github.com/dechamps/ASIO401"
+			VALUE "ProductName", "ASIO401 https://github.com/fleegstra/ASIO40x"
 			VALUE "ProductVersion", DECHAMPS_CMAKEUTILS_GIT_DESCRIPTION_DIRTY " built on " DECHAMPS_CMAKEUTILS_BUILD_TIME
 		}
 	}

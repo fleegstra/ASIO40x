@@ -3,15 +3,14 @@
 
 [Setup]
 AppID=ASIO401
-AppName=ASIO401
-AppVerName=ASIO401 @ASIO401_VERSION@
+AppName=ASIO40x
+AppVerName=ASIO40x @ASIO401_VERSION@
 AppVersion=@ASIO401_VERSION@
-AppPublisher=Etienne Dechamps
-AppPublisherURL=https://github.com/dechamps/ASIO401
-AppSupportURL=https://github.com/dechamps/ASIO401/issues
-AppUpdatesURL=https://github.com/dechamps/ASIO401/releases
-AppReadmeFile=https://github.com/dechamps/ASIO401/blob/@DECHAMPS_CMAKEUTILS_GIT_DESCRIPTION@/README.md
-AppContact=etienne@edechamps.fr
+AppPublisher=Frank Leegstra
+AppPublisherURL=https://github.com/fleegstra/ASIO40x
+AppSupportURL=https://github.com/fleegstra/ASIO40x/issues
+AppUpdatesURL=https://github.com/fleegstra/ASIO40x/releases
+AppReadmeFile=https://github.com/fleegstra/ASIO40x/blob/@DECHAMPS_CMAKEUTILS_GIT_DESCRIPTION@/README.md
 
 DefaultDirName={commonpf}\ASIO401
 AppendDefaultDirName=no
@@ -27,4 +26,4 @@ Source:"..\..\*.md"; DestDir:"{app}"; Flags: ignoreversion
 Source:"..\..\*.jpg"; DestDir:"{app}"; Flags: ignoreversion
 
 [Run]
-Filename:"https://github.com/dechamps/ASIO401/blob/@DECHAMPS_CMAKEUTILS_GIT_DESCRIPTION@/README.md"; Description:"Open README"; Flags: postinstall shellexec nowait skipifsilent
+Filename:"https://github.com/fleegstra/ASIO40x/blob/@DECHAMPS_CMAKEUTILS_GIT_DESCRIPTION@/README.md"; Description:"Open README"; Flags: postinstall shellexec nowait skipifsilent

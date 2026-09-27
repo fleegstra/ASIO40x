@@ -35,7 +35,7 @@ jobs:
       - run: cmake --install src/out/build/${{ matrix.msvc_config }}
       - uses: actions/upload-artifact@v4
         with:
-          name: ASIO401-${{ matrix.msvc_config }}
+          name: ASIO40x-${{ matrix.msvc_config }}
           path: src/out/install/${{ matrix.msvc_config }}/
   installer:
     runs-on: windows-latest
@@ -47,17 +47,17 @@ jobs:
           submodules: recursive
       - uses: actions/download-artifact@v4
         with:
-          name: ASIO401-x64-Release
+          name: ASIO40x-x64-Release
           path: src/out/install/x64-Release
       - uses: actions/download-artifact@v4
         with:
-          name: ASIO401-x86-Release
+          name: ASIO40x-x86-Release
           path: src/out/install/x86-Release
       - run: cmake -P installer.cmake
         working-directory: src
       - uses: actions/upload-artifact@v4
         with:
-          name: ASIO401-installer
+          name: ASIO40x-installer
           path: src/out/installer/*
   sigstore:
     runs-on: ubuntu-latest
@@ -67,7 +67,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: ASIO401-installer
+          name: ASIO40x-installer
       - uses: sigstore/gh-action-sigstore-python@v3.5.0
         with:
           inputs: "*"
@@ -78,7 +78,7 @@ jobs:
           if-no-files-found: error
   release:
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/asio401-')
+    if: startsWith(github.ref, 'refs/tags/asio40x-')
     needs:
       - installer
       - sigstore
@@ -87,7 +87,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: ASIO401-installer
+          name: ASIO40x-installer
       - uses: actions/download-artifact@v4
         with:
           name: sigstore
